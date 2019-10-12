@@ -1,5 +1,7 @@
 <?php
 
+require 'lib/php/class.WPAMP.php';
+
 /*
 
  Configuration
@@ -8,29 +10,17 @@
 
 */
 
-$wpamp_enabled_plugins = array(
-		'amp-sidebar', 'amp-consent', 'amp-analytics'
+$config = array(
+		'amp_libs' => array('amp-sidebar', 'amp-consent', 'amp-analytics'),
+		'amp_fonts' => array(
+			'Montserrat' => array(900),
+			'Roboto' => array(300)
+		),
+		'styles_to_keep' => array(),
+		'admin_styles_to_keep' => array('wp-admin', 'admin-bar', 'dashicons', 'open-sans'),
+		'custom_styles' => array('style.css')
 	);
 
-$wpamp_custom_fonts = array(
-	'Montserrat' => array(900),
-	'Roboto' => array(300)
-	);
-
-function wpamp_libs() {
-	foreach ($wpamp_enabled_plugins as $key => $value) {
-		echo '<script async custom-element="'.$lib.'" src="https://cdn.ampproject.org/v0/'.$lib.'-0.1.js"></script>';
-	}
-}
-
-function wpamp_fonts() {
-	$fontBase = 'https://fonts.googleapis.com/css?family=';
-	$fontFamilies = array();
-	foreach ($wpamp_custom_fonts as $font => $sizes) {
-		$fontFamilies[] = $font.':'.implode(',', $sizes);
-	}
-
-	echo '<link rel="stylesheet" href="'.$fontBase.implode('|', $fontFamilies).'">';
-}
+WPAMP::setup($config);
 
 ?>
