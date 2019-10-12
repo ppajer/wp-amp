@@ -6,7 +6,7 @@ require 'lib/php/class.WPAMP.php';
 
  Configuration
 
- Set up your AMP libraries and Google fonts here.
+ Set up your AMP libraries, Google fonts and custom styles here.
 
 */
 
@@ -16,7 +16,6 @@ $config = array(
 			'Montserrat' => array(900),
 			'Roboto' => array(300)
 		),
-		'styles_to_keep' => array(),
 		'admin_styles_to_keep' => array('wp-admin', 'admin-bar', 'dashicons', 'open-sans'),
 		'custom_styles' => array('style.css')
 	);

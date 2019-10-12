@@ -3,9 +3,8 @@
 class WPAMP {
 
 	private static $admin_styles_to_keep;
-	private static $styles_to_keep;
 	private static $custom_styles;
-	private static $amp_plugins;
+	private static $amp_libs;
 	private static $amp_fonts;
 
 	private static function strip_scripts() {
@@ -25,10 +24,8 @@ class WPAMP {
 		if (isset($wp_styles->registered)) {
 			
 			foreach ($wp_styles->registered as $handle => $style) {
-
-				$styles_to_keep = is_admin() ? self::$admin_styles_to_keep : self::$styles_to_keep;
 				
-				if (!in_array($handle, $styles_to_keep)) {
+				if (is_admin() AND !in_array($handle, self::$admin_styles_to_keep)) {
 					wp_deregister_style($handle);	
 				}
 			}
@@ -39,7 +36,7 @@ class WPAMP {
 		$fontBase = 'https://fonts.googleapis.com/css?family=';
 		$fontFamilies = array();
 		
-		foreach ($wpamp_custom_fonts as $font => $sizes) {
+		foreach (self::$amp_fonts as $font => $sizes) {
 			$fontFamilies[] = $font.':'.implode(',', $sizes);
 		}
 
@@ -49,7 +46,7 @@ class WPAMP {
 	private static function amp_libs() {
 		echo '<script async src="https://cdn.ampproject.org/v0.js"></script>';
 		
-		foreach ($wpamp_enabled_plugins as $lib) {
+		foreach (self::$amp_libs as $lib) {
 			echo '<script async custom-element="'.$lib.'" src="https://cdn.ampproject.org/v0/'.$lib.'-0.1.js"></script>';
 		}
 	}
@@ -61,7 +58,7 @@ class WPAMP {
 			
 			$url = get_template_directory_uri().'/'.$url;
 			
-			if (file_exists($url)) {
+			if (file_exists($url)) {
 				echo file_get_contents($url);
 			}
 		}
@@ -98,21 +95,33 @@ class WPAMP {
 		// TODO
 	}
 
+	public static function remove_emoji_support() {
+		remove_action( 'wp_head', 'print_emoji_detection_script', 7 ); 
+		remove_action( 'admin_print_scripts', 'print_emoji_detection_script' ); 
+		remove_action( 'wp_print_styles', 'print_emoji_styles' ); 
+		remove_action( 'admin_print_styles', 'print_emoji_styles' );
+	}
+
+	public static function remove_xmlrpc_support() {
+		add_filter('xmlrpc_enabled', '__return_false');
+	}
+
 	public static function setup($config) {
 		self::$amp_libs = isset($config['amp_libs']) ? $config['amp_libs'] : array();
 		self::$amp_fonts = isset($config['amp_fonts']) ? $config['amp_fonts'] : array();
 		self::$custom_styles = isset($config['custom_styles']) ? $config['custom_styles'] : array();
-		self::$styles_to_keep = isset($config['styles_to_keep']) ? $config['styles_to_keep'] : array();
 		self::$admin_styles_to_keep = isset($config['admin_styles_to_keep']) ? $config['admin_styles_to_keep'] : array();
 
+		self::remove_emoji_support();
+		self::remove_xmlrpc_support();
 		self::add_hooks();
 	}
 
 	public static function add_hooks() {
-		add_action('wp_enqueue_scripts', 'self::strip_assets');
-		add_action('wp_head', 'self::head');
+		add_action('wp_enqueue_scripts', 'WPAMP::strip_assets');
+		add_action('wp_head', 'WPAMP::head');
 
-		add_filter('image_send_to_editor', 'self::insert_amp_img', 10, 7 );
+		add_filter('image_send_to_editor', 'WPAMP::insert_amp_img', 10, 7 );
 	}
 }
 

@@ -14,7 +14,6 @@ Since the goal of AMP is to produce highly optimized sites, WP-AMP strips almost
 $config = array(
 		'amp_libs' => array(),
 		'amp_fonts' => array(),
-		'styles_to_keep' => array(),
 		'admin_styles_to_keep' => array('wp-admin', 'admin-bar', 'dashicons', 'open-sans'),
 		'custom_styles' => array()
 	);
@@ -39,7 +38,7 @@ $config['amp_fonts'] = array(
 
 ### Keeping styles
 
-If you don't want WP-AMP to strip some of the default WordPress styles, you can add the handles of those styles to the `styles_to_keep` or 'admin_styles_to_keep' arrays in the Config. Admin styles will only be visible to site admins, where you don't need to output valid AMP pages.
+If you don't want WP-AMP to strip some of the default WordPress styles, you can add the handles of those styles to the 'admin_styles_to_keep' array in the Config. Admin styles will only be visible to site admins, so not adhering to the AMP standard is acceptable here.
 
 ## Images
 
@@ -55,8 +54,14 @@ Images inserted into post content via the Insert Media button are converted to `
 
 // Todo
 
+## Other optimizazions
+
+- Emoji support removed
+- XMLRPC support removed
+
 ## TODO
 
+- remove guthenberg styles
 - Replace featured images with amp-img
 - Add per category list and index templates
 - Add post and page templates
