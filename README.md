@@ -8,7 +8,7 @@ Most of the magic happens inside the `functions.php` file, where the WPAMP class
 
 ### The config array
 
-Since the goal of AMP is to produce highly optimized sites, WP-AMP strips almost all assets that come bundled with WordPress out of the box, and only adds custom elements, webfonts and styles as necessary. The config array is where you can decide what to keep and what to insert. By default, the empty config array looks like this:
+Since the goal of AMP is to produce highly optimized sites, WP-AMP strips almost all assets that come bundled with WordPress out of the box, and only adds custom elements, webfonts and styles as necessary. The config array is where you can decide what to keep and what to insert. By default, the empty config array looks like this:
 
 ```
 $config = array(
